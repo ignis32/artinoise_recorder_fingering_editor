@@ -117,8 +117,8 @@ class FingeringGUI:
    
     def save_file(self):
         filepath = filedialog.asksaveasfilename(
-            defaultextension=".json",
-            filetypes=[("JSON Files", "*.json"), ("All Files", "*.*")],
+            defaultextension=".arf",
+            filetypes=[("ARF Files", "*.arf"), ("All Files", "*.*")],
             title="Save Fingering System As"
         )
         if filepath:
@@ -150,7 +150,7 @@ class FingeringGUI:
 
     def open_file(self):
         filepath = filedialog.askopenfilename(
-            filetypes=[("JSON Files", "*.json"), ("All Files", "*.*")]
+            filetypes=[("ARF Files", "*.arf"), ("All Files", "*.*")]
         )
         if filepath:
             new_fingering_system = FingeringSystem("Loaded System")
