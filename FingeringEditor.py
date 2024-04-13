@@ -77,7 +77,26 @@ class FingeringGUI:
 
         self.system_name_entry.insert(0, self.fingering_system.name)
         self.system_name_entry.bind("<FocusOut>", self.on_name_edit)
+
+         # Label for displaying collisions
+        self.collision_label = ttk.Label(master, text="", justify=tk.LEFT, foreground='red')
+        self.collision_label.grid(row=6, column=2, padx=10, pady=10, sticky='ew')
+
+        # Ensuring the label appears on the right side of the window
+        master.grid_columnconfigure(2, weight=1)  # This makes column 2 expand and take extra space
+
+        # Start the periodic check for fingering collisions
+         
+
+        self.check_fingering_collisions()
     
+    def check_fingering_collisions(self):
+        collisions = self.fingering_system.find_fingering_collisions()
+        collision_text = "\n".join([f"{', '.join(notes)} have the same fingering" for notes in collisions.values()])
+        self.collision_label.config(text=collision_text)
+        
+        # Schedule the next check
+        self.master.after(2000, self.check_fingering_collisions)  # checks every 5000 milliseconds (5 seconds)
     def on_name_edit(self, event=None):
         new_name = self.system_name_entry.get()
         self.fingering_system.update_name(new_name)

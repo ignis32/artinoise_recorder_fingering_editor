@@ -64,6 +64,21 @@ class FingeringSystem:
 
         with open(filepath, 'w') as file:
             json.dump(export_data, file, indent=4)
+    
+    def find_fingering_collisions(self):
+        fingerprint_map = {}
+        for note_var in self.notes:
+            for fingering in note_var.fingerings:
+                if not fingering.is_empty():
+                    # Create a hashable representation of the fingering
+                    fingerprint = tuple(fingering.holes)
+                    if fingerprint not in fingerprint_map:
+                        fingerprint_map[fingerprint] = []
+                    fingerprint_map[fingerprint].append(note_var.note)
+
+        # Filter out entries with less than two notes sharing the same fingering
+        collisions = {fp: notes for fp, notes in fingerprint_map.items() if len(notes) > 1}
+        return collisions
 
     def __repr__(self):
         return f"Fingering System: {self.name}, Notes: {self.notes}"
