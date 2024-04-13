@@ -80,7 +80,7 @@ class FingeringGUI:
 
          # Label for displaying collisions
         self.collision_label = ttk.Label(master, text="", justify=tk.LEFT, foreground='red')
-        self.collision_label.grid(row=6, column=2, padx=10, pady=10, sticky='ew')
+        self.collision_label.grid(row=1, column=3, padx=10, pady=10, sticky='ew')
 
         # Ensuring the label appears on the right side of the window
         master.grid_columnconfigure(2, weight=1)  # This makes column 2 expand and take extra space
