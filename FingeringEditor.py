@@ -31,7 +31,7 @@ class FingeringGUI:
 
         # Listbox for notes
         self.note_listbox = tk.Listbox(master, height=15, width=2, exportselection=False)
-        self.note_listbox.grid(row=1, column=0, padx=10, pady=10, sticky='nsew')
+        self.note_listbox.grid(row=1, column=0, padx=2, pady=10, sticky='nsew')
 
         self.note_listbox.bind("<<ListboxSelect>>", self.update_fingering_display)
 
@@ -41,7 +41,7 @@ class FingeringGUI:
 
         # Canvas for the flute visualization
         self.canvas = Canvas(master)
-        self.canvas.grid(row=0, column=1, rowspan=3, padx=10, pady=20, sticky='nsew')
+        self.canvas.grid(row=0, column=1, rowspan=2, padx=2, pady=20, sticky='nsew')
 
         # Grid configuration for resizing
         master.grid_rowconfigure(1, weight=1)  # Make the listbox row stretchable
