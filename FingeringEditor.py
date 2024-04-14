@@ -92,11 +92,14 @@ class FingeringGUI:
     
     def check_fingering_collisions(self):
         collisions = self.fingering_system.find_fingering_collisions()
-        collision_text = "\n".join([f"{', '.join(notes)} have the same fingering" for notes in collisions.values()])
+        non_zero_variations = sum(1 for note in self.fingering_system.notes for fingering in note.fingerings if not fingering.is_empty())
+        collision_text = f"Non-zero Variations: {non_zero_variations}  (max allowed 62)\n"
+        collision_text += "\n".join([f"{', '.join(notes)} have the same fingering" for notes in collisions.values()])
         self.collision_label.config(text=collision_text)
-        
+
         # Schedule the next check
-        self.master.after(2000, self.check_fingering_collisions)  # checks every 5000 milliseconds (5 seconds)
+        self.master.after(2000, self.check_fingering_collisions)  # checks every 2000 milliseconds (2 seconds)
+
     def on_name_edit(self, event=None):
         new_name = self.system_name_entry.get()
         self.fingering_system.update_name(new_name)
@@ -200,6 +203,44 @@ def create_empty_fingering_system(name):
             variations.add_fingering(fingering)
             system.add_note_fingering(variations)
     return system
+
+#   looks like a dead end experiment for now
+ 
+#def create_binary_fingering_system(name):
+#     notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+#     system = FingeringSystem(name)
+#     start_octave = 2
+#     binary_number = 1  # Start from binary 00001 for C2
+#     total_notes = 62  # Number of notes to generate
+
+#     for i in range(total_notes):
+#         octave = start_octave + i // 12
+#         note_index = i % 12
+#         note_name = f"{notes[note_index]}{octave}"
+
+#         # Convert binary_number to a list of 0s (open) and 2s (closed)
+#         binary_str = f"{binary_number:07b}"
+#         fingering = [2 if char == '1' else 0 for char in binary_str]
+
+#         # Adjust fingering according to rules:
+#         # Octave hole is always closed (2), adjusting binary positions to flute holes (2-9)
+#         # Holes 6-7 and 8-9 should change state simultaneously
+#         # Flute fingering layout: [Octave, 1, 2, 3, 4, 5, 6&7, 8&9]
+#         flute_fingering = [2]  # Octave hole is always closed
+#         flute_fingering.extend(fingering[:-2])  # Add individual holes 1-5
+#         flute_fingering.extend([fingering[-2]] * 2)  # Holes 6 and 7 are simultaneous
+#         flute_fingering.extend([fingering[-1]] * 2)  # Holes 8 and 9 are simultaneous
+
+#         variations = NoteVariations(note_name)
+#         fingering_instance = NoteFingering(flute_fingering)
+#         variations.add_fingering(fingering_instance)
+#         system.add_note_fingering(variations)
+
+#         # Increment the binary number for the next note
+#         binary_number += 1
+
+#     return system
+
 
 if __name__ == "__main__":
     root = tk.Tk()
