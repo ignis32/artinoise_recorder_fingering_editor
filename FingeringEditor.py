@@ -30,10 +30,8 @@ class FingeringGUI:
 
 
         # Listbox for notes
-        self.note_listbox = tk.Listbox(master, height=15, width=50, exportselection=False)
+        self.note_listbox = tk.Listbox(master, height=15, width=2, exportselection=False)
         self.note_listbox.grid(row=1, column=0, padx=10, pady=10, sticky='nsew')
-        self.note_listbox.bind("<<ListboxSelect>>", self.update_fingering_display)
-    
 
         self.note_listbox.bind("<<ListboxSelect>>", self.update_fingering_display)
 
