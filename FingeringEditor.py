@@ -1,7 +1,32 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, Canvas
 from FingeringSystem import FingeringSystem, NoteVariations, NoteFingering
-from FingeringViz import Flute, Hole
+from FingeringViz import Flute, Hole, FluteForPrint
+from tkinter import ttk, filedialog, Canvas, messagebox
+import os
+from PIL import Image, ImageDraw
+import re
+
+def sanitize_filename(filename):
+    # Remove invalid characters for Windows and Linux
+    sanitized = re.sub(r'[<>:"/\\|?*\x00-\x1F]', '', filename)
+    # Replace spaces with underscores if desired
+    sanitized = sanitized.replace(' ', '_')
+    # Avoid filenames that could be problematic in Windows
+    reserved_names = {
+        "CON", "PRN", "AUX", "NUL",
+        "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+        "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
+    }
+    if sanitized.upper() in reserved_names or sanitized == '':
+        sanitized = 'default'
+    return sanitized
+
+# Example usage
+filename = "><>?*"
+clean_filename = sanitize_filename(filename)
+print(clean_filename)  # Output: default
+
 
 class FingeringGUI:
     def __init__(self, master, fingering_system=None):
@@ -19,6 +44,8 @@ class FingeringGUI:
         self.menu.add_cascade(label="File", menu=self.file_menu)
         self.file_menu.add_command(label="Open", command=self.open_file)
         self.file_menu.add_command(label="Export", command=self.save_file)
+        self.file_menu.add_command(label="Print", command=self.print_fingerings)
+
         self.file_menu.add_separator()
         self.file_menu.add_command(label="Exit", command=master.quit)
 
@@ -46,17 +73,6 @@ class FingeringGUI:
         # Grid configuration for resizing
         master.grid_rowconfigure(1, weight=1)  # Make the listbox row stretchable
         master.grid_columnconfigure(1, weight=1)  # Ensure the canvas also resizes
-
-  
-
-        # if fingering_system:
-        #     self.load_fingering_system(fingering_system)
-        #     self.update_all_list_item_colors()  # Start the periodic update
-        # else:
-        #     self.fingering_system = create_empty_fingering_system("Empty System")
-        #     self.load_fingering_system(self.fingering_system)
-        #     self.update_all_list_item_colors()  # Start the periodic update
-
         
         self.system_name_label = ttk.Label(master, text="System Name:")
         self.system_name_label.grid(row=4, column=0, padx=10, pady=2, sticky='w')
@@ -88,6 +104,70 @@ class FingeringGUI:
 
         self.check_fingering_collisions()
     
+ 
+
+    def print_fingerings(self):
+        # A4 dimensions at 300 DPI
+        a4_width = 2480
+        a4_height = 3508
+        base_flute_image_width = 340
+        base_flute_image_height = 60
+
+        # Count non-empty fingerings
+        total_non_empty = sum(1 for note_variations in self.fingering_system.notes for fingering in note_variations.fingerings if not fingering.is_empty())
+        if total_non_empty == 0:
+            print("No non-empty fingerings to print.")
+            return
+
+        # Try different numbers of columns to find the best fit
+        best_layout = (1, float('inf'))  # (scale_factor, number_of_columns)
+        for columns in range(1, total_non_empty + 1):
+            rows = (total_non_empty + columns - 1) // columns
+            scale_factor_width = a4_width / (columns * base_flute_image_width)
+            scale_factor_height = a4_height / (rows * base_flute_image_height)
+            scale_factor = min(scale_factor_width, scale_factor_height)
+
+            # Compare the area used by this layout to find the most efficient one
+            if rows * base_flute_image_height * scale_factor < a4_height:
+                best_layout = min(best_layout, (scale_factor, columns), key=lambda x: -x[0])
+
+        # Determine the best number of columns and the corresponding scale factor
+        scale_factor, columns = best_layout
+        rows = (total_non_empty + columns - 1) // columns
+
+        # Calculate final dimensions of each image
+        final_image_width = int(base_flute_image_width * scale_factor)
+        final_image_height = int(base_flute_image_height * scale_factor)
+
+        # Create an A4 image with a white background
+        a4_image = Image.new('RGB', (a4_width, a4_height), 'white')
+
+        x_offset = 0
+        y_offset = 0
+
+        count = 0
+        for note_variations in self.fingering_system.notes:
+            for fingering in note_variations.fingerings:
+                if not fingering.is_empty():
+                    flute_image = FluteForPrint(note_variations).get_image()
+                    resized_flute_image = flute_image.resize((final_image_width, final_image_height), Image.LANCZOS)
+                    a4_image.paste(resized_flute_image, (x_offset, y_offset))
+                    x_offset += final_image_width
+                    count += 1
+                    if count % columns == 0:
+                        x_offset = 0
+                        y_offset += final_image_height
+
+        # Save the A4 image
+        file_path = os.path.join("img", f"{sanitize_filename(self.fingering_system.name)}.png")
+        a4_image.save(file_path)
+        print(f"Saved all fingerings to {file_path}")
+
+
+
+
+ 
+
     def check_fingering_collisions(self):
         collisions = self.fingering_system.find_fingering_collisions()
         non_zero_variations = sum(1 for note in self.fingering_system.notes for fingering in note.fingerings if not fingering.is_empty())
@@ -201,44 +281,7 @@ def create_empty_fingering_system(name):
             variations.add_fingering(fingering)
             system.add_note_fingering(variations)
     return system
-
-#   looks like a dead end experiment for now
  
-#def create_binary_fingering_system(name):
-#     notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-#     system = FingeringSystem(name)
-#     start_octave = 2
-#     binary_number = 1  # Start from binary 00001 for C2
-#     total_notes = 62  # Number of notes to generate
-
-#     for i in range(total_notes):
-#         octave = start_octave + i // 12
-#         note_index = i % 12
-#         note_name = f"{notes[note_index]}{octave}"
-
-#         # Convert binary_number to a list of 0s (open) and 2s (closed)
-#         binary_str = f"{binary_number:07b}"
-#         fingering = [2 if char == '1' else 0 for char in binary_str]
-
-#         # Adjust fingering according to rules:
-#         # Octave hole is always closed (2), adjusting binary positions to flute holes (2-9)
-#         # Holes 6-7 and 8-9 should change state simultaneously
-#         # Flute fingering layout: [Octave, 1, 2, 3, 4, 5, 6&7, 8&9]
-#         flute_fingering = [2]  # Octave hole is always closed
-#         flute_fingering.extend(fingering[:-2])  # Add individual holes 1-5
-#         flute_fingering.extend([fingering[-2]] * 2)  # Holes 6 and 7 are simultaneous
-#         flute_fingering.extend([fingering[-1]] * 2)  # Holes 8 and 9 are simultaneous
-
-#         variations = NoteVariations(note_name)
-#         fingering_instance = NoteFingering(flute_fingering)
-#         variations.add_fingering(fingering_instance)
-#         system.add_note_fingering(variations)
-
-#         # Increment the binary number for the next note
-#         binary_number += 1
-
-#     return system
-
 
 if __name__ == "__main__":
     root = tk.Tk()
