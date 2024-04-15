@@ -111,10 +111,10 @@ class Flute:
 
 
 class FluteForPrint:
-    def __init__(self, note_fingering):
-        self.note_fingering = note_fingering
+    def __init__(self, fingering, note_name):
+        self.fingering = fingering
+        self.note_name = note_name
         self.image = self.draw_flute()
-
     def draw_flute(self):
         # Create an image with white background
         image_width = 340
@@ -131,9 +131,8 @@ class FluteForPrint:
             font = ImageFont.load_default()
 
         # Draw note name on the left
-        draw.text((text_offset, base_y - 10), self.note_fingering.note, fill='black', font=font)
-
-        for i, state in enumerate(self.note_fingering.fingerings[0].holes):
+        draw.text((text_offset, base_y - 10), self.note_name, fill='black', font=font)
+        for i, state in enumerate(self.fingering.holes):
             x = 30 + i * 30
             y = base_y
             is_octave = (i == 0)

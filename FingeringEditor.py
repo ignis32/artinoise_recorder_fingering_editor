@@ -109,7 +109,7 @@ class FingeringGUI:
     def print_fingerings(self):
         img_directory = "img"
         os.makedirs(img_directory, exist_ok=True) 
-        
+
         # A4 dimensions at 300 DPI
         a4_width = 2480
         a4_height = 3508
@@ -152,7 +152,7 @@ class FingeringGUI:
         for note_variations in self.fingering_system.notes:
             for fingering in note_variations.fingerings:
                 if not fingering.is_empty():
-                    flute_image = FluteForPrint(note_variations).get_image()
+                    flute_image = FluteForPrint(fingering, note_variations.note).get_image()
                     resized_flute_image = flute_image.resize((final_image_width, final_image_height), Image.LANCZOS)
                     a4_image.paste(resized_flute_image, (x_offset, y_offset))
                     x_offset += final_image_width
