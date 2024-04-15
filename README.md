@@ -46,3 +46,6 @@ Others can probably launch from the code, using something like
 
 "python FingeringEditor.py"
 
+
+
+"Print" function creates a png image with all the positions and their notes from your current fingering system.
