@@ -107,6 +107,9 @@ class FingeringGUI:
  
 
     def print_fingerings(self):
+        img_directory = "img"
+        os.makedirs(img_directory, exist_ok=True) 
+        
         # A4 dimensions at 300 DPI
         a4_width = 2480
         a4_height = 3508
