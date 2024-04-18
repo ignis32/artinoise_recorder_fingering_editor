@@ -48,4 +48,4 @@ Others can probably launch from the code, using something like
 
 
 
-"Print" function creates a png image with all the positions and their notes from your current fingering system.
+"Print" function creates a png image with all the positions and their notes from your current fingering system. And puts it to "img/" folder
