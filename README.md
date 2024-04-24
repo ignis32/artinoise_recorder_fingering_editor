@@ -2,7 +2,7 @@ Use (or not use) on your own risk. I made it for myself.
 
 It is a desktop editor for  ARF (artinoise re.corder fingering) slapped together with duct tape and python code in haste.
 
-I found very inconvenient to use phone app for extensive fingering system editing, some wrote this.
+I found very inconvenient to use phone app for extensive fingering system editing, therefore here it this.
 
 
 At the moment of version 0.0.3:
