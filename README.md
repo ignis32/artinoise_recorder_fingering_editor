@@ -36,7 +36,7 @@ In case if your new changes do not seem to apply, try to import under a differen
 Phone app at the moment does not seem capable of deleting fingerings, but it can reset list of fingerings to default, removing all custom ones.
 
 
-Actual compiled editor binary to run on Windows can be downloaded here:
+Actual compiled editor binary to run on Windows (made with pythoninstaller) can be downloaded here:
 
 https://github.com/ignis32/artinoise_recorder_fingering_editor/releases
 
