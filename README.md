@@ -5,7 +5,7 @@ It is a desktop editor for  ARF (artinoise re.corder fingering) slapped together
 I found very inconvenient to use phone app for extensive fingering system editing, therefore here it this.
 
 
-At the moment of version 0.0.3:
+At the moment of version 0.0.6:
 
 
 * Editing basically works. Can edit and export ARF files, and name them.
