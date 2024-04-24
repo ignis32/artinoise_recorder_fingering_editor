@@ -13,17 +13,15 @@ At the moment of version 0.0.3:
 * It does not support keyboard mode fingerings, whatever they are.
 
 
-UI is ugly as hell, but is tuned to fit  two running editors into one HD 1920x1080 so you can compare two fingering systems,
-and should be simple enough to be usable.
-
-
+UI is ugly as hell, but is tuned to fit  two running editors into one HD 1920x1080 monitor, so you can compare two fingering systems.
+ 
 Editor warns  you on:
 
 1) amount of positions (variations)   which should be not more than 62 to work.
 2) positions collisions (same positions for different notes) 
 
 However editor does not enforce them.
-It is up to you to fix these problems before uploading. 
+It is up to you to fix these problems before uploading, as phone artinoise app would decline such fingering file.
 
 P.S. 
 
