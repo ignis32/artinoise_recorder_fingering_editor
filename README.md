@@ -27,7 +27,7 @@ It is up to you to fix these problems before uploading, as phone artinoise app w
 P.S. 
 
 Also, notes with positions (variants) containing only open holes are considered to be non existent. 
-Additionaly, it means that re.corder does not acctually accept all-open-hole position as a real playable position by design.
+Additionaly, it means that re.corder does not actually accept all-open-hole position as a real playable position by design.
 So if you intend, for example to delete "A#0" (it is not a part of your fingering system) you just make sure it contains only one position with all holes being white (open).
 
 
@@ -49,5 +49,5 @@ But I actually have not tried that on other OSes yet.
 
 
 
-"Print" function creates a png image with all the positions and their notes from your current fingering system. And puts it to "img/" folder.
+"Print" function creates a png image with all the positions and their notes from your current fingering system. And puts it to "img/" folder, named after fingering system name .
 This image is A4 sized, and it's intended purpose is to be printed.
