@@ -32,7 +32,7 @@ So if you intend, for example to delete "A#0" (it is not a part of your fingerin
 
 
 Editor cannot upload ARF to re.corder files yet, use stock phone app for that. 
-In case if your new changes do not seem to apply, try to import under a different name.
+In case if your new changes do not seem to apply, try to import under a different name (fingering system name, not file name).
 Phone app at the moment does not seem capable of deleting fingerings, but it can reset list of fingerings to default, removing all custom ones.
 
 
