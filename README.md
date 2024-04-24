@@ -45,6 +45,9 @@ Others can probably launch from the code, using something like
 
 "python FingeringEditor.py"
 
+But I actually have not tried that on other OSes yet.
 
 
-"Print" function creates a png image with all the positions and their notes from your current fingering system. And puts it to "img/" folder
+
+"Print" function creates a png image with all the positions and their notes from your current fingering system. And puts it to "img/" folder.
+This image is A4 sized, and it's intended purpose is to be printed.
