@@ -1,4 +1,5 @@
 import json
+import chardet
 
 class NoteFingering:
     def __init__(self, holes):
@@ -38,7 +39,15 @@ class FingeringSystem:
         return None
 
     def load_from_file(self, filepath):
-        with open(filepath, 'r') as file:
+
+        # Read some bytes from the file to detect encoding
+        with open(filepath, 'rb') as file:
+            raw_data = file.read(32)  # Read the first few bytes to get a good guess
+            encoding = chardet.detect(raw_data)['encoding']
+
+
+         # Now open the file with the detected encoding
+        with open(filepath, 'r', encoding=encoding) as file:
             data = json.load(file)
             self.name = data['name']
             for note_group in data['position']:

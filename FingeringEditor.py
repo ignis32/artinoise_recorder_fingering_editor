@@ -56,11 +56,21 @@ class FingeringGUI:
         self.add_variation_button.grid(row=3, column=0, padx=10, pady=10, sticky='nw')
 
 
-        # Listbox for notes
-        self.note_listbox = tk.Listbox(master, height=15, width=2, exportselection=False)
+       # Listbox for notes
+        self.note_listbox = tk.Listbox(master, height=15, width=10, exportselection=False)
         self.note_listbox.grid(row=1, column=0, padx=2, pady=10, sticky='nsew')
 
+        # Scrollbar for the Listbox
+        self.scrollbar = tk.Scrollbar(master, orient="vertical")
+        self.scrollbar.grid(row=1, column=0, sticky='ens')  # Ensure this column is free and right next to the Listbox
+
+        # Configure the Listbox to interact with the Scrollbar
+        self.note_listbox.config(yscrollcommand=self.scrollbar.set)
+        self.scrollbar.config(command=self.note_listbox.yview)
+
         self.note_listbox.bind("<<ListboxSelect>>", self.update_fingering_display)
+
+
 
         # Label for showing the number of variations
         self.variations_label = ttk.Label(master, text="Variations: 0")
@@ -68,7 +78,7 @@ class FingeringGUI:
 
         # Canvas for the flute visualization
         self.canvas = Canvas(master)
-        self.canvas.grid(row=0, column=1, rowspan=2, padx=2, pady=20, sticky='nsew')
+        self.canvas.grid(row=0, column=2, rowspan=2, padx=2, pady=20, sticky='nsew')
 
         # Grid configuration for resizing
         master.grid_rowconfigure(1, weight=1)  # Make the listbox row stretchable
@@ -77,9 +87,11 @@ class FingeringGUI:
         self.system_name_label = ttk.Label(master, text="System Name:")
         self.system_name_label.grid(row=4, column=0, padx=10, pady=2, sticky='w')
 
-        self.system_name_entry = ttk.Entry(master)
+        self.system_name_entry = ttk.Entry(master, width=20)
         self.system_name_entry.grid(row=5, column=0, padx=10, pady=2, sticky='we')
-
+        
+        # Create a blank row below the entry for bottom padding
+        master.grid_rowconfigure(6, minsize=30)
         # Assuming 'fingering_system' is an object of FingeringSystem
         if fingering_system:
             self.load_fingering_system(fingering_system)
