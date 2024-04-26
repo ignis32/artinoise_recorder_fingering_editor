@@ -76,6 +76,9 @@ class FingeringGUI:
         self.variations_label = ttk.Label(master, text="Variations: 0")
         self.variations_label.grid(row=2, column=0, padx=10, pady=10, sticky='nw')
 
+
+
+
         # Canvas for the flute visualization
         self.canvas = Canvas(master)
         self.canvas.grid(row=0, column=2, rowspan=2, padx=2, pady=20, sticky='nsew')
